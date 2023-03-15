@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "venice.fullname" . }}-server
   labels:
@@ -8,6 +8,7 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  serviceName: "{{ template "venice.fullname" . }}-server"
   selector:
     matchLabels:
       {{- include "venice.selectorLabels.server" . | nindent 6 }}
@@ -36,24 +37,17 @@ spec:
           command: [ "sh", "-c" ]
           args:
             - >
+              env &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/server.properties &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/cluster.properties &&
               exec java -jar bin/venice-server-all.jar configs/single-dc
           envFrom:
             - configMapRef:
-                name: "{{ include "venice.fullname" . }}-controller"
+                name: "{{ include "venice.fullname" . }}-server"
           ports:
             - name: http
-              containerPort: 54096
+              containerPort: 54093
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

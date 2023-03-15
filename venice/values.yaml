@@ -8,20 +8,25 @@ image:
   client:
     repository: eolivellidatastax/venice-client
     pullPolicy: IfNotPresent
-    tag: 0.4.17-2
+    tag: 0.4.17-3
   server:
     repository: eolivellidatastax/venice-server
     pullPolicy: IfNotPresent
-    tag: 0.4.17-2
+    tag: 0.4.17-3
   router: 
     repository: eolivellidatastax/venice-router
     pullPolicy: IfNotPresent
-    tag: 0.4.17-2
+    tag: 0.4.17-3
   controller:
     repository: eolivellidatastax/venice-controller
     pullPolicy: IfNotPresent
-    tag: 0.4.17-2
+    tag: 0.4.17-3
 
+zookeeper:
+  address: "pulsar-zookeeper-ca.mypulsar.svc.cluster.local:2181"
+
+kafka:
+  address: "pulsar-proxy.mypulsar.svc.cluster.local:9092"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -49,23 +54,6 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  type: ClusterIP
-  port: 80
-
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -90,8 +78,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-kafka:
-  enabled: false
 
 livenessProbe: false

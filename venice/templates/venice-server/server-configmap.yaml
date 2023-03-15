@@ -21,7 +21,7 @@ metadata:
   name: {{ include "venice.fullname" . }}-server
   namespace: {{ .Release.Namespace }}
 data:
-  VENICECONF_zookeeper_address: "pulsar-zookeeper-ca.{{ .Release.Namespace }}.svc.cluster.local:2181"
-  VENICECONF_kafka_bootstrap_servers: "pulsar-proxy.{{ .Release.Namespace }}.svc.cluster.local:9092"
-  VENICECONF_r2d2Client_zkHosts: "pulsar-zookeeper-ca.{{ .Release.Namespace }}.svc.cluster.local:2181"
+  VENICECONF_zookeeper_address: "{{ .Values.zookeeper.address }}"
+  VENICECONF_kafka_bootstrap_servers: "{{ .Values.kafka.address }}"
+  VENICECONF_r2d2Client_zkHosts: "{{ .Values.zookeeper.address }}"
   VENICECONF_kafka_zk_address: "NOT-USED"

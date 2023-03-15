@@ -5,11 +5,11 @@ metadata:
   labels:
     {{- include "venice.labels.router" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
+    - port: 7777
       name: http
+    - port: 7778
+      name: https
   selector:
     {{- include "venice.selectorLabels.router" . | nindent 4 }}

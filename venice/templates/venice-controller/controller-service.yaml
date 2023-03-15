@@ -5,11 +5,9 @@ metadata:
   labels:
     {{- include "venice.labels.controller" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
+    - port: 5555
       name: http
   selector:
     {{- include "venice.selectorLabels.controller" . | nindent 4 }}

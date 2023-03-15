@@ -33,18 +33,22 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.router.repository }}:{{ .Values.image.router.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.router.pullPolicy }}
+          command: [ "sh", "-c" ]
+          args:
+            - >
+              env &&
+              /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/router.properties &&
+              exec java -jar bin/venice-router-all.jar configs/single-dc/router.properties
+          envFrom:
+            - configMapRef:
+                name: "{{ include "venice.fullname" . }}-router"
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 7777
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            - name: https
+              containerPort: 7778
+              protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

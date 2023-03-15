@@ -36,6 +36,7 @@ spec:
           command: [ "sh", "-c" ]
           args:
             - >
+              env &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/controller.properties &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/cluster.properties &&
               exec java -jar /opt/venice/bin/venice-controller-all.jar configs/single-dc/cluster.properties configs/single-dc/controller.properties
@@ -46,14 +47,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: "{{ include "venice.fullname" . }}-controller"
-          livenessProbe:
-             httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
