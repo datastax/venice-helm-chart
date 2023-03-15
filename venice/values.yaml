@@ -6,21 +6,21 @@ replicaCount: 1
 
 image:
   client:
-    repository: venicedb/venice-client
+    repository: eolivellidatastax/venice-client
     pullPolicy: IfNotPresent
-    tag: latest
+    tag: 0.4.17-2
   server:
-    repository: venicedb/venice-server
+    repository: eolivellidatastax/venice-server
     pullPolicy: IfNotPresent
-    tag: latest
+    tag: 0.4.17-2
   router: 
-    repository: venicedb/venice-router
+    repository: eolivellidatastax/venice-router
     pullPolicy: IfNotPresent
-    tag: latest
+    tag: 0.4.17-2
   controller:
-    repository: venicedb/venice-controller
+    repository: eolivellidatastax/venice-controller
     pullPolicy: IfNotPresent
-    tag: latest
+    tag: 0.4.17-2
 
 
 imagePullSecrets: []
@@ -92,6 +92,6 @@ tolerations: []
 affinity: {}
 
 kafka:
-  enabled: true
+  enabled: false
 
 livenessProbe: false

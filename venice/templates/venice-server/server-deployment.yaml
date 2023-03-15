@@ -33,9 +33,18 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.server.repository }}:{{ .Values.image.server.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.server.pullPolicy }}
+          command: [ "sh", "-c" ]
+          args:
+            - >
+              /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/server.properties &&
+              /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/cluster.properties &&
+              exec java -jar bin/venice-server-all.jar configs/single-dc
+          envFrom:
+            - configMapRef:
+                name: "{{ include "venice.fullname" . }}-controller"
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 54096
               protocol: TCP
           livenessProbe:
             httpGet:
