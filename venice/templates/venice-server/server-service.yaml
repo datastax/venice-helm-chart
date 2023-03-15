@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "venice.fullname" . }}-server
+  name: "{{ template "venice.fullname" . }}-server"
   labels:
     {{- include "venice.labels.server" . | nindent 4 }}
 spec:

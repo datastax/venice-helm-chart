@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "venice.labels.client" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "venice.selectorLabels.client" . | nindent 6 }}
@@ -33,20 +31,14 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.client.repository }}:{{ .Values.image.client.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.client.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          {{- if .Values.livenessProbe -}}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          {{- end }}
+          command: [ "sh", "-c" ]
+          args:
+            - >
+              env &&
+              sleep infinity
+          envFrom:
+            - configMapRef:
+                name: "{{ include "venice.fullname" . }}-client"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
