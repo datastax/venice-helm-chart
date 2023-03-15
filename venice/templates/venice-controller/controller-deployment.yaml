@@ -47,6 +47,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: "{{ include "venice.fullname" . }}-controller"
+          env:
+            - name: VENICE_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
