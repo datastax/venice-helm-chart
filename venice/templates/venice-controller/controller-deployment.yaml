@@ -37,6 +37,7 @@ spec:
           args:
             - >
               env &&
+              export VENICECONF_admin_hostname=$(hostname -i) &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/controller.properties &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/cluster.properties &&
               exec java -jar /opt/venice/bin/venice-controller-all.jar configs/single-dc/cluster.properties configs/single-dc/controller.properties

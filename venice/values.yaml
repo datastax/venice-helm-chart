@@ -8,19 +8,19 @@ image:
   client:
     repository: eolivellidatastax/venice-client
     pullPolicy: IfNotPresent
-    tag: 0.4.17-10
+    tag: 0.4.17-14
   server:
     repository: eolivellidatastax/venice-server
     pullPolicy: IfNotPresent
-    tag: 0.4.17-10
+    tag: 0.4.17-14
   router: 
     repository: eolivellidatastax/venice-router
     pullPolicy: IfNotPresent
-    tag: 0.4.17-10
+    tag: 0.4.17-14
   controller:
     repository: eolivellidatastax/venice-controller
     pullPolicy: IfNotPresent
-    tag: 0.4.17-10
+    tag: 0.4.17-14
 
 zookeeper:
   address: "pulsar-zookeeper-ca.mypulsar.svc.cluster.local:2181"

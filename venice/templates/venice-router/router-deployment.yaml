@@ -37,6 +37,7 @@ spec:
           args:
             - >
               env &&
+              export VENICECONF_listener_hostname=$(hostname -i) &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/router.properties &&
               exec java -jar bin/venice-router-all.jar configs/single-dc/router.properties
           envFrom:
