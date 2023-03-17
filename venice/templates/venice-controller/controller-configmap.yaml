@@ -25,3 +25,11 @@ data:
   VENICECONF_kafka_bootstrap_servers: "{{ .Values.kafka.address }}"
   VENICECONF_r2d2Client_zkHosts: "{{ .Values.zookeeper.address }}"
   VENICECONF_kafka_zk_address: "NOT-USED"
+{{- if .Values.kafka.sasl.enabled }}
+  VENICECONF_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
+  VENICECONF_sasl_mechanism: PLAIN
+  VENICECONF_security_protocol: SASL_PLAINTEXT
+  VENICECONF_kafka_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
+  VENICECONF_kafka_sasl_mechanism: PLAIN
+  VENICECONF_kafka_security_protocol: SASL_PLAINTEXT
+  {{- end }}
