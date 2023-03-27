@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "venice.labels.server" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.venice.server.replicas }}
   serviceName: "{{ template "venice.fullname" . }}-server"
   selector:
     matchLabels:
@@ -45,6 +43,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: "{{ include "venice.fullname" . }}-server"
+          volumeMounts:
+            - name: "venice-server-rocksdb-data"
+              mountPath: /opt/venice/rocksdb
           ports:
             - name: http
               containerPort: 54093
@@ -63,3 +64,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: "venice-server-rocksdb-data"
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

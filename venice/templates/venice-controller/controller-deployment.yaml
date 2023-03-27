@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "venice.labels.controller" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.venice.controller.replicas }}
   selector:
     matchLabels:
       {{- include "venice.selectorLabels.controller" . | nindent 6 }}
