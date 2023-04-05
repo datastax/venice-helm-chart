@@ -37,6 +37,9 @@ venice:
   router:
     replicas: 1
 
+metrics:
+  enabled: false
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

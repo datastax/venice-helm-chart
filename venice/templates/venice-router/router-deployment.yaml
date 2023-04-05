@@ -37,7 +37,10 @@ spec:
               env &&
               export VENICECONF_listener_hostname=$(hostname -i) &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/router.properties &&
-              exec java -jar bin/venice-router-all.jar configs/single-dc/router.properties
+              {{ if .Values.metrics.enabled }}
+              export METRICS="-javaagent:bin/jmx_prometheus_javaagent.jar=8080:bin/prometheus_config.yaml" &&
+              {{ end }}
+              exec java $METRICS -jar bin/venice-router-all.jar configs/single-dc/router.properties
           envFrom:
             - configMapRef:
                 name: "{{ include "venice.fullname" . }}-router"
@@ -47,6 +50,9 @@ spec:
               protocol: TCP
             - name: https
               containerPort: 7778
+              protocol: TCP
+            - name: metrics
+              containerPort: 8080
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

@@ -39,7 +39,10 @@ spec:
               export VENICECONF_listener_hostname=$(hostname -f) &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/server.properties &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/cluster.properties &&
-              exec java -jar bin/venice-server-all.jar configs/single-dc
+              {{ if .Values.metrics.enabled }}
+                 export METRICS="-javaagent:bin/jmx_prometheus_javaagent.jar=8080:bin/prometheus_config.yaml" &&
+              {{ end }}
+              exec java $METRICS -jar bin/venice-server-all.jar configs/single-dc
           envFrom:
             - configMapRef:
                 name: "{{ include "venice.fullname" . }}-server"
@@ -49,6 +52,9 @@ spec:
           ports:
             - name: http
               containerPort: 54093
+              protocol: TCP
+            - name: metrics
+              containerPort: 8080
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
