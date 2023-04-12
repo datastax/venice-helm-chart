@@ -2,21 +2,21 @@
 
 image:
   client:
-    repository: eolivellidatastax/venice-client
+    repository: datastax/venice-client
     pullPolicy: IfNotPresent
-    tag: kafkatls-3
+    tag: 0.4.17-alpha-1
   server:
-    repository: eolivellidatastax/venice-server
+    repository: datastax/venice-server
     pullPolicy: IfNotPresent
-    tag: kafkatls-3
+    tag: 0.4.17-alpha-1
   router: 
-    repository: eolivellidatastax/venice-router
+    repository: datastax/venice-router
     pullPolicy: IfNotPresent
-    tag: kafkatls-3
+    tag: 0.4.17-alpha-1
   controller:
-    repository: eolivellidatastax/venice-controller
+    repository: datastax/venice-controller
     pullPolicy: IfNotPresent
-    tag: kafkatls-3
+    tag: 0.4.17-alpha-1
 
 zookeeper:
   address: "pulsar-zookeeper-ca.mypulsar.svc.cluster.local:2181"
