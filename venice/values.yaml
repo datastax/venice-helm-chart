@@ -25,17 +25,37 @@ kafka:
   address: ''
   sasl:
     enabled: false
-    config: ''
     username: ''
     password: ''
+  ssl:
+    enabled: false
+    tlsSecretName: ''
+    certsPath: '/venice/certs'
+    # direct setting of the trustore
+    truststoreFile: ''    
+    truststorePassword: ''
+    # automatic conversion from PEM to PCKS12
+    convertPEMtoPKCS12: false
+    truststorePEMFile: 'ca.crt'
+    truststorePEMFileKey: 'tls.key'
 
 venice:
   controller:
     replicas: 1
+    resources: {}
+    configData: {}
   server:
     replicas: 1
+    resources: {}
+    configData: {}
   router:
     replicas: 1
+    resources: {}
+    configData: {}
+  client:
+    replicas: 1
+    resources: {}
+    configData: {}
 
 metrics:
   enabled: false
@@ -65,8 +85,6 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
-resources: {}
 
 nodeSelector: {}
 

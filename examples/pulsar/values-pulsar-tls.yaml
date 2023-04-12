@@ -1,0 +1,38 @@
+# Sample value file for Pulsar using DataStax Starlight for Kafka
+
+image:
+  client:
+    repository: eolivellidatastax/venice-client
+    pullPolicy: IfNotPresent
+    tag: kafkatls-3
+  server:
+    repository: eolivellidatastax/venice-server
+    pullPolicy: IfNotPresent
+    tag: kafkatls-3
+  router: 
+    repository: eolivellidatastax/venice-router
+    pullPolicy: IfNotPresent
+    tag: kafkatls-3
+  controller:
+    repository: eolivellidatastax/venice-controller
+    pullPolicy: IfNotPresent
+    tag: kafkatls-3
+
+zookeeper:
+  address: "pulsar-zookeeper-ca.mypulsar.svc.cluster.local:2181"
+
+kafka:
+  address: "pulsar-broker.mypulsar.svc.cluster.local:9093"
+  sasl:
+    enabled: true
+    username: venice
+    password: "token:eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdXBlcnVzZXIifQ.mIDiqZJ7M81TugqbhC2xSYFPXn90Hmjyeu5UW5Occr2XfZOJfGOVl6CRS9aO-iU_7YARvdBtrULYHy79cOs_n7iw_f2inReJfhqWhCRyF6r7mqclV1-5KlghPpbWiFDKoSjiBasvHLQsDSzQAqjLC7mPVVwBJrGnEjOjy1ica7NeEEeN4mZO0z3B7os78SsAD1n1ZSJGMSAvXglnmwvHYYxtcp039OfGt5ZLm5yDlmB-RWZM-_A5_zo3Vo-u3rEpQI8u33Z7ExvnUn0m5SzcjELiknDM92rpy_0vI76DFhj7rdSTyycTffgW2wsya91LyhEAhc7pk9DZSH1fXJcfog"
+  ssl:
+    enabled: true    
+    tlsSecretName: 'pulsar-ss-ca'
+    convertPEMtoPKCS12: true    
+    truststorePEMFile: 'ca.crt'
+    truststorePEMFileKey: 'tls.key'
+
+metrics:
+  enabled: true

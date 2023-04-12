@@ -36,7 +36,11 @@ spec:
           args:
             - >
               env &&
+              ls -la {{.Values.kafka.ssl.certsPath}} &&
               export VENICECONF_listener_hostname=$(hostname -f) &&
+              {{ if .Values.kafka.ssl.convertPEMtoPKCS12 }}
+              openssl pkcs12 -export -out /tmp/trustore.p12 -in {{.Values.kafka.ssl.certsPath}}/{{.Values.kafka.ssl.truststorePEMFile}} -inkey {{.Values.kafka.ssl.certsPath}}/{{.Values.kafka.ssl.truststorePEMFileKey}} -passout pass: &&
+              {{ end }}
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/server.properties &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/cluster.properties &&
               {{ if .Values.metrics.enabled }}
@@ -49,6 +53,11 @@ spec:
           volumeMounts:
             - name: "venice-server-rocksdb-data"
               mountPath: /opt/venice/rocksdb
+          {{- if .Values.kafka.ssl.enabled }}
+            - name: certs
+              readOnly: true
+              mountPath: {{ .Values.kafka.ssl.certsPath }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 54093
@@ -57,7 +66,13 @@ spec:
               containerPort: 8080
               protocol: TCP
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.venice.server.resources | nindent 12 }}
+      volumes:
+        {{- if .Values.kafka.ssl.enabled }}
+        - name: certs
+          secret:
+            secretName: {{ .Values.kafka.ssl.tlsSecretName }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

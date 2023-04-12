@@ -25,11 +25,45 @@ data:
   VENICECONF_kafka_bootstrap_servers: "{{ .Values.kafka.address }}"
   VENICECONF_r2d2Client_zkHosts: "{{ .Values.zookeeper.address }}"
   VENICECONF_kafka_zk_address: "NOT-USED"
-{{- if .Values.kafka.sasl.enabled }}
+  {{- if and (.Values.kafka.sasl.enabled) (.Values.kafka.ssl.enabled) }}
+  VENICECONF_kafka_security_protocol: "SASL_SSL"
+  VENICECONF_security_protocol: "SASL_SSL"
+  {{- else if and (.Values.kafka.sasl.enabled) (not .Values.kafka.ssl.enabled) }}
+  VENICECONF_kafka_security_protocol: "SASL_PLAINTEXT"
+  VENICECONF_security_protocol: "SASL_PLAINTEXT"
+  {{- else if .Values.kafka.ssl.enabled }}
+  VENICECONF_kafka_security_protocol: "SSL"
+  VENICECONF_security_protocol: "SSL"
+  {{ end }}
+  {{- if .Values.kafka.sasl.enabled }}
   VENICECONF_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
   VENICECONF_sasl_mechanism: PLAIN
-  VENICECONF_security_protocol: SASL_PLAINTEXT
   VENICECONF_kafka_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
   VENICECONF_kafka_sasl_mechanism: PLAIN
-  VENICECONF_kafka_security_protocol: SASL_PLAINTEXT
+  {{- end }}
+  {{- if .Values.kafka.ssl.enabled }}
+  VENICECONF_ssl_kafka_bootstrap_servers: "{{ .Values.kafka.address }}"
+  {{- if .Values.kafka.ssl.convertPEMtoPKCS12 }}
+  VENICECONF_ssl_truststore_location: "/tmp/trustore.p12"
+  VENICECONF_ssl_truststore_password: ""
+  VENICECONF_kafka_ssl_truststore_location: "/tmp/trustore.p12"
+  VENICECONF_kafka_ssl_truststore_password: ""
+  {{- else}}
+  VENICECONF_ssl_truststore_location: "{{ .Values.kafka.ssl.truststoreFile }}"
+  VENICECONF_ssl_truststore_password: "{{ .Values.kafka.ssl.truststorePassword }}"
+  VENICECONF_kafka_ssl_truststore_location: "{{ .Values.kafka.ssl.truststoreFile }}"
+  VENICECONF_kafka_ssl_truststore_password: "{{ .Values.kafka.ssl.truststorePassword }}"
+  {{- end}}
+  VENICECONF_ssl_truststore_type: "PKCS12"
+  VENICECONF_ssl_keymanager_algorithm: "SunX509"
+  VENICECONF_ssl_trustmanager_algorithm: "SunX509"
+  VENICECONF_ssl_secure_random_implementation: "SHA1PRNG"
+  VENICECONF_ssl_keystore_location: ""
+  VENICECONF_ssl_keystore_password: ""
+  VENICECONF_ssl_key_password: ""
+  VENICECONF_ssl_keystore_type: "PKCS12"
+  VENICECONF_ssl_to_kakfa: "true"
+  {{- end }}
+  {{- range $key, $val := $.Values.venice.controller.configData }}
+  {{ $key }}: {{ $val | replace "\"" "" | trim | quote }}
   {{- end }}

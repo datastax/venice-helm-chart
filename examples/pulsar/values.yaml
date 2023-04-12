@@ -1,0 +1,32 @@
+# Sample value file for Pulsar using DataStax Starlight for Kafka
+
+image:
+  client:
+    repository: eolivellidatastax/venice-client
+    pullPolicy: IfNotPresent
+    tag: testprom
+  server:
+    repository: eolivellidatastax/venice-server
+    pullPolicy: IfNotPresent
+    tag: kafkatls-1
+  router: 
+    repository: eolivellidatastax/venice-router
+    pullPolicy: IfNotPresent
+    tag: kafkatls-1
+  controller:
+    repository: eolivellidatastax/venice-controller
+    pullPolicy: IfNotPresent
+    tag: kafkatls-1
+
+zookeeper:
+  address: "pulsar-zookeeper-ca.mypulsar.svc.cluster.local:2181"
+
+kafka:
+  address: "pulsar-broker.mypulsar.svc.cluster.local:9092"
+  sasl:
+    enabled: true
+    username: public
+    password: "token:eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdXBlcnVzZXIifQ.JQpDWJ9oHD743ZyuIw55Qp0bb8xzP6gK0KIWRniF2WnJB1m3v5MsrpfMlmRIlFc3-htWRAFHCc4E0ipj7JU8HjBqLIvVErRseRG-UTM1EprVkj0mk37jXV3ef7gER0KHn9CUKEQPfmTACeKlQ2oV4_qPAZ6HiEt51vzANfZH24vLCIjiOG77Z4s_w2sfgpiodRmhBLFOg_qnQTfGs7TBDWgu4DRoJ6CYZSEcp8q7j8xp_zNVIFGTRjWskocUvedHS9ZsCGZjzuPvRPp19B0VvAjEjtwpa6j7Khvjf4imjp2QHDnZwpCIEp4DSicwM48F5q4k722IdiyTTsVBWy8Cyg"
+
+metrics:
+  enabled: true

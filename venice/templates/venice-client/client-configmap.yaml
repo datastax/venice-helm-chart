@@ -25,3 +25,6 @@ data:
   VENICECONF_kafka_bootstrap_servers: "{{ .Values.kafka.address }}"
   VENICECONF_r2d2Client_zkHosts: "{{ .Values.zookeeper.address }}"
   VENICECONF_kafka_zk_address: "NOT-USED"
+  {{- range $key, $val := $.Values.venice.router.configData }}
+  {{ $key }}: {{ $val | replace "\"" "" | trim | quote }}
+  {{- end }}
