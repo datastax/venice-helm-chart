@@ -40,6 +40,8 @@ data:
   VENICECONF_sasl_mechanism: PLAIN
   VENICECONF_kafka_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
   VENICECONF_kafka_sasl_mechanism: PLAIN
+  VENICECONF_kafka_kafka_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
+  VENICECONF_kafka_kafka_sasl_mechanism: PLAIN
   {{- end }}
   {{- if .Values.kafka.ssl.enabled }}
   VENICECONF_ssl_kafka_bootstrap_servers: "{{ .Values.kafka.address }}"
@@ -58,9 +60,6 @@ data:
   VENICECONF_ssl_keymanager_algorithm: "SunX509"
   VENICECONF_ssl_trustmanager_algorithm: "SunX509"
   VENICECONF_ssl_secure_random_implementation: "SHA1PRNG"
-  VENICECONF_ssl_keystore_location: ""
-  VENICECONF_ssl_keystore_password: ""
-  VENICECONF_ssl_key_password: ""
   VENICECONF_ssl_keystore_type: "PKCS12"
   VENICECONF_ssl_to_kakfa: "true"
   {{- end }}

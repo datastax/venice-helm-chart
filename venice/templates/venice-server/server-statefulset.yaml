@@ -35,8 +35,6 @@ spec:
           command: [ "sh", "-c" ]
           args:
             - >
-              env &&
-              ls -la {{.Values.kafka.ssl.certsPath}} &&
               export VENICECONF_listener_hostname=$(hostname -f) &&
               {{ if .Values.kafka.ssl.convertPEMtoPKCS12 }}
               openssl pkcs12 -export -out /tmp/trustore.p12 -in {{.Values.kafka.ssl.certsPath}}/{{.Values.kafka.ssl.truststorePEMFile}} -inkey {{.Values.kafka.ssl.certsPath}}/{{.Values.kafka.ssl.truststorePEMFileKey}} -passout pass: &&
