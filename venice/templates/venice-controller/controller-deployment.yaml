@@ -39,6 +39,12 @@ spec:
               {{ if .Values.kafka.ssl.convertPEMtoPKCS12 }}
               openssl pkcs12 -export -out /tmp/trustore.p12 -in {{.Values.kafka.ssl.certsPath}}/{{.Values.kafka.ssl.truststorePEMFile}} -inkey {{.Values.kafka.ssl.certsPath}}/{{.Values.kafka.ssl.truststorePEMFileKey}} -passout pass: &&
               {{ end }}
+              {{- if .Values.kafka.sasl.readPasswordFromSecret }}
+              SASLPASSWORD=$(cat {{.Values.kafka.sasl.passwordPath}})
+              SASLCONFIG="org.apache.kafka.common.security.plain.PlainLoginModule required username=\"{{ .Values.kafka.sasl.username }}\" password=\"$SASLPASSWORD\";"
+              export VENICECONF_kafka_sasl_jaas_config=$SASLCONFIG
+              export VENICECONF_kafka_kafka_sasl_jaas_config=$SASLCONFIG
+              {{ end }}
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/controller.properties &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/cluster.properties &&
               {{ if .Values.metrics.enabled }}
@@ -58,6 +64,11 @@ spec:
               readOnly: true
               mountPath: {{ .Values.kafka.ssl.certsPath }}
             {{- end }}
+            {{- if .Values.kafka.sasl.readPasswordFromSecret }}
+            - name: saslPassword
+              readOnly: true
+              mountPath: {{ .Values.kafka.sasl.passwordPath }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: "{{ include "venice.fullname" . }}-controller"
@@ -68,6 +79,11 @@ spec:
       - name: certs
         secret:
           secretName: {{ .Values.kafka.ssl.tlsSecretName }}
+      {{- end }}
+      {{- if .Values.kafka.sasl.readPasswordFromSecret }}
+      - name: saslPassword
+        secret:
+          secretName: {{ .Values.kafka.sasl.passwordSecretName }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

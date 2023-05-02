@@ -27,6 +27,9 @@ kafka:
     enabled: false
     username: ''
     password: ''
+    readPasswordFromSecret: false
+    passwordSecretName: ''
+    passwordPath: '/venice/saslPassword'
   ssl:
     enabled: false
     tlsSecretName: ''
