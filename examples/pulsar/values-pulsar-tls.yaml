@@ -4,19 +4,19 @@ image:
   client:
     repository: datastax/venice-client
     pullPolicy: IfNotPresent
-    tag: 0.4.17-alpha-1
+    tag: 0.4.17-alpha-2
   server:
     repository: datastax/venice-server
     pullPolicy: IfNotPresent
-    tag: 0.4.17-alpha-1
+    tag: 0.4.17-alpha-2
   router: 
     repository: datastax/venice-router
     pullPolicy: IfNotPresent
-    tag: 0.4.17-alpha-1
+    tag: 0.4.17-alpha-2
   controller:
     repository: datastax/venice-controller
     pullPolicy: IfNotPresent
-    tag: 0.4.17-alpha-1
+    tag: 0.4.17-alpha-2
 
 zookeeper:
   address: "pulsar-zookeeper-ca.mypulsar.svc.cluster.local:2181"
