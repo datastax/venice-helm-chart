@@ -41,7 +41,8 @@ spec:
               {{ end }}
               {{- if .Values.kafka.sasl.readPasswordFromSecret }}
               export SASLPASSWORD=$(cat {{.Values.kafka.sasl.passwordPath}}/{{.Values.kafka.sasl.passwordFile}})  &&
-              export SASLCONFIG="org.apache.kafka.common.security.plain.PlainLoginModule required username=\"{{ .Values.kafka.sasl.username }}\" password=\"$SASLPASSWORD\";"  &&
+              export SASLCONFIG="org.apache.kafka.common.security.plain.PlainLoginModule required username=\"{{ .Values.kafka.sasl.username }}\" password=\"token:$SASLPASSWORD\";"  &&
+              export VENICECONF_sasl_jaas_config="$SASLCONFIG"  &&
               export VENICECONF_kafka_sasl_jaas_config="$SASLCONFIG"  &&
               export VENICECONF_kafka_kafka_sasl_jaas_config="$SASLCONFIG" &&
               {{ end }}
