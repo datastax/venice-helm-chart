@@ -36,14 +36,10 @@ data:
   VENICECONF_security_protocol: "SSL"
   {{ end }}
   {{- if .Values.kafka.sasl.enabled }}
-
   VENICECONF_sasl_mechanism: PLAIN
   VENICECONF_kafka_sasl_mechanism: PLAIN
-  VENICECONF_kafka_kafka_sasl_mechanism: PLAIN
   {{- if not .Values.kafka.sasl.readPasswordFromSecret }}
-  VENICECONF_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
   VENICECONF_kafka_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
-  VENICECONF_kafka_kafka_sasl_jaas_config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="{{ .Values.kafka.sasl.username }}" password="{{ .Values.kafka.sasl.password }}";'
   {{- end }}
   {{- end }}
   {{- if .Values.kafka.ssl.enabled }}
