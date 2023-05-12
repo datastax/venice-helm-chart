@@ -25,19 +25,19 @@ kafka:
   address: ''
   sasl:
     enabled: false
-    username: ''
-    password: ''
+    username: ""
+    password: ""
     readPasswordFromSecret: false
-    passwordSecretName: ''
-    passwordPath: '/venice/saslPassword'
-    passwordFile: ''
+    passwordSecretName: ""
+    passwordPath: "/venice/sasl"
+    passwordFile: ""
   ssl:
     enabled: false
-    tlsSecretName: ''
+    tlsSecretName: ""
     certsPath: '/venice/certs'
     # direct setting of the trustore
-    truststoreFile: ''    
-    truststorePassword: ''
+    truststoreFile: ""    
+    truststorePassword: ""
     # automatic conversion from PEM to PCKS12
     convertPEMtoPKCS12: false
     truststorePEMFile: 'ca.crt'
