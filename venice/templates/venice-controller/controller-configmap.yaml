@@ -62,6 +62,11 @@ data:
   VENICECONF_ssl_keystore_type: "PKCS12"
   VENICECONF_ssl_to_kakfa: "true"
   {{- end }}
+  {{- if .Values.authentication.enableTokenAuth }}
+  VENICECONF_authentication_service_class: "com.linkedin.venice.authentication.jwt.TokenAuthenticationService"
+  VENICECONF_authorizer_service_class: "com.linkedin.venice.authorization.SimpleAuthorizerService"
+  VENICECONF_authentication_jwt_publicKey: "file:///venice/jwtPublicKey/{{ .Values.authentication.tokenPublicKeyFile }}"
+  {{- end}}
   {{- range $key, $val := $.Values.venice.controller.configData }}
   {{ $key }}: {{ $val | replace "\"" "" | trim | quote }}
   {{- end }}

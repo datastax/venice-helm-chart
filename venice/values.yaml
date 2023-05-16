@@ -30,6 +30,7 @@ kafka:
     readPasswordFromSecret: false
     passwordSecretName: ''
     passwordPath: '/venice/saslPassword'
+    passwordFile: ''
   ssl:
     enabled: false
     tlsSecretName: ''
@@ -41,8 +42,12 @@ kafka:
     convertPEMtoPKCS12: false
     truststorePEMFile: 'ca.crt'
     truststorePEMFileKey: 'tls.key'
-
-venice:
+authentication:
+    enableTokenAuth: false
+    # mount the public key for JWT verification from a secret
+    publicKeySecretName: "token-public-key"
+    tokenPublicKeyFile: "my-public.key"
+venice:  
   controller:
     replicas: 1
     resources: {}
