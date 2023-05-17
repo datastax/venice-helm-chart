@@ -25,6 +25,13 @@ data:
   VENICECONF_kafka_bootstrap_servers: "{{ .Values.kafka.address }}"
   VENICECONF_r2d2Client_zkHosts: "{{ .Values.zookeeper.address }}"
   VENICECONF_kafka_zk_address: "NOT-USED"
+  {{- if .Values.authentication.enableTokenAuth }}
+  VENICECONF_authentication_service_class: "com.linkedin.venice.authentication.jwt.TokenAuthenticationService"
+  VENICECONF_authorizer_service_class: "com.linkedin.venice.authorization.SimpleAuthorizerService"
+  {{- if .Values.authentication.publicKeySecretName }}
+  VENICECONF_authentication_jwt_publicKey: "file:///venice/jwtPublicKey/{{ .Values.authentication.tokenPublicKeyFile }}"
+  {{- end }}
+  {{- end}}
   {{- range $key, $val := $.Values.venice.router.configData }}
   {{ $key }}: {{ $val | replace "\"" "" | trim | quote }}
   {{- end }}

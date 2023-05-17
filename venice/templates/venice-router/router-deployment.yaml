@@ -56,6 +56,18 @@ spec:
               protocol: TCP
           resources:
             {{- toYaml .Values.venice.router.resources | nindent 12 }}
+          volumeMounts:
+            {{- if and (.Values.authentication.enableTokenAuth) (.Values.authentication.publicKeySecretName) }}
+            - name: token-public-key
+              readOnly: true
+              mountPath: "/venice/jwtPublicKey"
+            {{- end }}
+      volumes:
+      {{- if and (.Values.authentication.enableTokenAuth) (.Values.authentication.publicKeySecretName) }}
+        - name: token-public-key
+          secret:
+            secretName: {{.Values.authentication.publicKeySecretName}}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
