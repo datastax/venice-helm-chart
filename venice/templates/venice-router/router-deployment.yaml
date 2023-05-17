@@ -57,13 +57,13 @@ spec:
           resources:
             {{- toYaml .Values.venice.router.resources | nindent 12 }}
           volumeMounts:
-            {{- if .Values.authentication.enableTokenAuth }}
+            {{- if and (.Values.authentication.enableTokenAuth) (.Values.authentication.publicKeySecretName) }}
             - name: token-public-key
               readOnly: true
               mountPath: "/venice/jwtPublicKey"
             {{- end }}
       volumes:
-      {{- if .Values.authentication.enableTokenAuth }}
+      {{- if and (.Values.authentication.enableTokenAuth) (.Values.authentication.publicKeySecretName) }}
         - name: token-public-key
           secret:
             secretName: {{.Values.authentication.publicKeySecretName}}
