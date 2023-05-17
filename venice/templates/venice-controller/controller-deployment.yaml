@@ -64,7 +64,7 @@ spec:
               readOnly: true
               mountPath: {{ .Values.kafka.ssl.certsPath }}
             {{- end }}
-            {{- if .Values.authentication.enableTokenAuth }}
+            {{- if and (.Values.authentication.enableTokenAuth) (.Values.authentication.publicKeySecretName) }}
             - name: token-public-key
               readOnly: true
               mountPath: "/venice/jwtPublicKey"
@@ -85,7 +85,7 @@ spec:
         secret:
           secretName: {{ .Values.kafka.ssl.tlsSecretName }}
       {{- end }}
-      {{- if .Values.authentication.enableTokenAuth }}
+      {{- if and (.Values.authentication.enableTokenAuth) (.Values.authentication.publicKeySecretName) }}
       - name: token-public-key
         secret:
           secretName: {{.Values.authentication.publicKeySecretName}}

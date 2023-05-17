@@ -45,8 +45,8 @@ kafka:
 authentication:
     enableTokenAuth: false
     # mount the public key for JWT verification from a secret
-    publicKeySecretName: "token-public-key"
-    tokenPublicKeyFile: "my-public.key"
+    publicKeySecretName: ""
+    tokenPublicKeyFile: ""
 venice:  
   controller:
     replicas: 1
