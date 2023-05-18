@@ -31,12 +31,13 @@ data:
   {{- if .Values.authentication.publicKeySecretName }}
   VENICECONF_authentication_jwt_publicKey: "file:///venice/jwtPublicKey/{{ .Values.authentication.tokenPublicKeyFile }}"
   {{- end }}
-  # since we use the token, the client cert can be disabled
-  VENICECONF_ssl_needs_client_cert: "false"
+  
   {{- end }}
   {{- if .Values.router.ssl.enabled }}
   VENICECONF_ssl_enabled: "true"
   VENICECONF_router_local_ssl: "false"
+  # mTLS ACL is not supported
+  VENICECONF_ssl_needs_client_cert: "false"
   {{- end }}
   {{- range $key, $val := $.Values.venice.router.configData }}
   {{ $key }}: {{ $val | replace "\"" "" | trim | quote }}
