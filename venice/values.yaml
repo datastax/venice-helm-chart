@@ -60,6 +60,9 @@ venice:
     replicas: 1
     resources: {}
     configData: {}
+    ssl:
+      enabled: false
+      secretName: ""
   client:
     replicas: 1
     resources: {}

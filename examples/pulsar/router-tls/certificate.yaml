@@ -1,0 +1,42 @@
+# Self signed issuer
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: "venice-self-signed-issuer"
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "venice-ca-certificate"
+
+spec:
+  secretName: "venice-ss-ca"
+  commonName: "svc.cluster.local"
+  usages:
+    - server auth
+    - client auth
+  isCA: true
+  issuerRef:
+    name: "venice-self-signed-issuer"
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: "venice-ca-issuer"
+spec:
+  ca:
+    secretName: venice-ss-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "venice-router-tls"
+spec:
+  secretName: venice-router-tls
+  dnsNames:
+  - "venice-router"
+  issuerRef:
+    name: "venice-ca-issuer"
+---
