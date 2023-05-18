@@ -4,10 +4,11 @@ metadata:
   name: {{ include "venice.fullname" . }}-controller
   labels:
     {{- include "venice.labels.controller" . | nindent 4 }}
+  annotations:
+{{ toYaml .Values.venice.controller.service.annotations | indent 4 }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.venice.controller.service.type }}
   ports:
-    - port: 5555
-      name: http
+  {{ toYaml .Values.venice.controller.service.ports | indent 2 }}
   selector:
     {{- include "venice.selectorLabels.controller" . | nindent 4 }}
