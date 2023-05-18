@@ -33,7 +33,7 @@ data:
   {{- end }}
   
   {{- end }}
-  {{- if .Values.router.ssl.enabled }}
+  {{- if .Values.venice.router.ssl.enabled }}
   VENICECONF_ssl_enabled: "true"
   VENICECONF_router_local_ssl: "false"
   # mTLS ACL is not supported
