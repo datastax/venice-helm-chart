@@ -30,6 +30,8 @@ router:
   ssl:
     enabled: true
     secretName: "venice-router-tls"
+    certificateFilename: "tls.crt"
+    keyFilename: "tls.key"
 
 metrics:
   enabled: true

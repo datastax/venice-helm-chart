@@ -38,8 +38,8 @@ spec:
               set -e &&
               setup_tls() {
                 name=venice
-                crtFile=/venice/certs/tls.crt
-                keyFile=/venice/certs/tls.key
+                crtFile=/venice/certs/{{ .Values.router.ssl.certificateFilename }}}
+                keyFile=/venice/certs/{{ .Values.router.ssl.keyFilename }}}
                 caFile=/etc/ssl/certs/ca-certificates.crt
                 p12File=/opt/venice/tls.p12
                 keyStoreFile=/opt/venice/tls.keystore.jks
