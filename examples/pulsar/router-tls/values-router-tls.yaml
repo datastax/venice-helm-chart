@@ -26,12 +26,13 @@ kafka:
   sasl:
     enabled: false
 
-router:
-  ssl:
-    enabled: true
-    secretName: "venice-router-tls"
-    certificateFilename: "tls.crt"
-    keyFilename: "tls.key"
+venice:
+  router:
+    ssl:
+      enabled: true
+      secretName: "venice-router-tls"
+      certificateFilename: "tls.crt"
+      keyFilename: "tls.key"
 
 metrics:
   enabled: true
