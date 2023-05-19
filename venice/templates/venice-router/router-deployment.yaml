@@ -34,7 +34,58 @@ spec:
           command: [ "sh", "-c" ]
           args:
             - >
-              env &&
+              env && 
+              set -e &&
+              setup_tls() {
+                name=venice
+                crtFile=/venice/certs/{{ .Values.venice.router.ssl.certificateFilename }}
+                keyFile=/venice/certs/{{ .Values.venice.router.ssl.keyFilename }}
+                caFile=/etc/ssl/certs/ca-certificates.crt
+                p12File=/opt/venice/tls.p12
+                keyStoreFile=/opt/venice/tls.keystore.jks
+                
+
+                keystoreSecretFile=/opt/venice/keystoreSecret.txt
+                head /dev/urandom | base64 | head -c 24 > $keystoreSecretFile
+                
+                export VENICECONF_ssl_truststore_password=$(cat /opt/venice/keystoreSecret.txt)
+                export VENICECONF_ssl_truststore_type=JKS
+                export VENICECONF_ssl_truststore_location=/opt/venice/tls.truststore.jks
+
+                export VENICECONF_ssl_keystore_password=$(cat /opt/venice/keystoreSecret.txt)
+                export VENICECONF_ssl_keystore_type=JKS
+                export VENICECONF_ssl_keystore_location=/opt/venice/tls.keystore.jks
+                set -x
+                
+
+                openssl pkcs12 \
+                    -export \
+                    -in ${crtFile} \
+                    -inkey ${keyFile} \
+                    -out ${p12File} \
+                    -name ${name} \
+                    -passout "file:${keystoreSecretFile}"
+
+                cat ${keystoreSecretFile}
+
+                keytool -importkeystore \
+                    -srckeystore ${p12File} \
+                    -srcstoretype PKCS12 -srcstorepass:file ${keystoreSecretFile} \
+                    -alias ${name} \
+                    -destkeystore $VENICECONF_ssl_keystore_location \
+                    -deststorepass:file ${keystoreSecretFile}
+
+                keytool -import \
+                    -file ${caFile} \
+                    -storetype JKS \
+                    -alias ${name} \
+                    -keystore $VENICECONF_ssl_truststore_location \
+                    -storepass:file ${keystoreSecretFile} \
+                    -trustcacerts -noprompt
+              } &&
+              {{ if .Values.venice.router.ssl.enabled }}
+              setup_tls &&
+              {{ end }}
               export VENICECONF_listener_hostname=$(hostname -i) &&
               /opt/venice/bin/apply-config-from-env-with-prefix.py VENICECONF_ /opt/venice/configs/single-dc/router.properties &&
               {{ if .Values.metrics.enabled }}
@@ -62,11 +113,21 @@ spec:
               readOnly: true
               mountPath: "/venice/jwtPublicKey"
             {{- end }}
+            {{- if .Values.venice.router.ssl.enabled }}
+            - name: certs
+              readOnly: true
+              mountPath: "/venice/certs"
+            {{- end }}
       volumes:
       {{- if and (.Values.authentication.enableTokenAuth) (.Values.authentication.publicKeySecretName) }}
         - name: token-public-key
           secret:
             secretName: {{.Values.authentication.publicKeySecretName}}
+      {{- end }}
+      {{- if .Values.venice.router.ssl.enabled }}
+        - name: certs
+          secret:
+            secretName: {{ .Values.venice.router.ssl.secretName }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

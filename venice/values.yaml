@@ -60,6 +60,13 @@ venice:
     replicas: 1
     resources: {}
     configData: {}
+    ssl:
+      enabled: false
+      secretName: ""
+      # Filename for the .crt file inside the secret
+      certificateFilename: ""
+      # Filename for the .key file inside the secret
+      keyFilename: ""
   client:
     replicas: 1
     resources: {}

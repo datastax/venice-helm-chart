@@ -1,0 +1,38 @@
+# Sample value file for Pulsar using DataStax Starlight for Kafka
+
+image:
+  client:
+    repository: datastax/venice-client
+    pullPolicy: IfNotPresent
+    tag: ds-0.4.17-alpha-12
+  server:
+    repository: datastax/venice-server
+    pullPolicy: IfNotPresent
+    tag: ds-0.4.17-alpha-12
+  router: 
+    repository: datastax/venice-router
+    pullPolicy: IfNotPresent
+    tag: ds-0.4.17-alpha-12
+  controller:
+    repository: datastax/venice-controller
+    pullPolicy: IfNotPresent
+    tag: ds-0.4.17-alpha-12
+
+zookeeper:
+  address: "pulsar-zookeeper-ca.pulsar.svc.cluster.local:2181"
+
+kafka:
+  address: "pulsar-broker.pulsar.svc.cluster.local:9092"
+  sasl:
+    enabled: false
+
+venice:
+  router:
+    ssl:
+      enabled: true
+      secretName: "venice-router-tls"
+      certificateFilename: "tls.crt"
+      keyFilename: "tls.key"
+
+metrics:
+  enabled: true

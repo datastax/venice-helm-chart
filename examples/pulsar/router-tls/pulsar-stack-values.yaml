@@ -1,0 +1,42 @@
+pulsar-operator:
+  operator:
+    image: datastax/lunastreaming-operator:0.0.4
+  cluster:
+    create: true
+    spec:
+      global:
+        name: pulsar
+        image: datastax/lunastreaming-all:2.10_4.4
+        restartOnConfigMapChange: true
+        antiAffinity:
+          host:
+            enabled: false
+      zookeeper:
+        replicas: 1
+        resources:
+          requests:
+            cpu: "0.2"
+            memory: "128Mi"
+      bookkeeper:
+        replicas: 1
+        resources:
+          requests:
+            cpu: "0.2"
+            memory: "128Mi"
+      broker:
+        replicas: 1
+        resources:
+          requests:
+            cpu: "0.2"
+            memory: "128Mi"
+        kafka:
+          enabled: true
+        config:
+          managedLedgerDefaultAckQuorum: 1
+          managedLedgerDefaultEnsembleSize: 1
+          managedLedgerDefaultWriteQuorum: 1
+      proxy:
+        replicas: 0
+cert-manager:
+  enabled: true
+  installCRDs: true
