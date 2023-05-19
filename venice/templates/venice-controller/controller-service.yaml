@@ -5,10 +5,10 @@ metadata:
   labels:
     {{- include "venice.labels.controller" . | nindent 4 }}
   annotations:
-{{ toYaml .Values.venice.controller.service.annotations | indent 4 }}
+    {{ toYaml .Values.venice.controller.service.annotations | nindent 4 }}
 spec:
   type: {{ .Values.venice.controller.service.type }}
   ports:
-  {{ toYaml .Values.venice.controller.service.ports | indent 2 }}
+    {{ toYaml .Values.venice.controller.service.ports | nindent 4 }}
   selector:
     {{- include "venice.selectorLabels.controller" . | nindent 4 }}

@@ -5,10 +5,10 @@ metadata:
   labels:
     {{- include "venice.labels.router" . | nindent 4 }}
   annotations:
-{{ toYaml .Values.venice.router.service.annotations | indent 4 }}
+    {{ toYaml .Values.venice.router.service.annotations | nindent 4 }}
 spec:
   type: {{ .Values.venice.router.service.type }}
   ports:
-  {{ toYaml .Values.venice.router.service.ports | indent 2 }}
+    {{ toYaml .Values.venice.router.service.ports | nindent 4 }}
   selector:
     {{- include "venice.selectorLabels.router" . | nindent 4 }}
