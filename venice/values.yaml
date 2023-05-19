@@ -52,10 +52,21 @@ venice:
     replicas: 1
     resources: {}
     configData: {}
+    service:
+      type: ClusterIP
+      ports:
+        - port: 5555
+          name: http
+      annotations: {}
   server:
     replicas: 1
     resources: {}
     configData: {}
+    service:
+      ports:
+        - port: 54093
+          name: http
+      annotations: {}
   router:
     replicas: 1
     resources: {}
@@ -67,6 +78,14 @@ venice:
       certificateFilename: ""
       # Filename for the .key file inside the secret
       keyFilename: ""
+    service:
+      type: ClusterIP
+      ports:
+      - port: 7777
+        name: http
+      - port: 7778
+        name: https
+      annotations: {}
   client:
     replicas: 1
     resources: {}

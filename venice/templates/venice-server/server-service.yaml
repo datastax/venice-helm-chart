@@ -4,10 +4,11 @@ metadata:
   name: "{{ template "venice.fullname" . }}-server"
   labels:
     {{- include "venice.labels.server" . | nindent 4 }}
+  annotations:
+    {{ toYaml .Values.venice.server.service.annotations | nindent 4 }}
 spec:
   ports:
-    - port: 54093
-      name: http
+    {{ toYaml .Values.venice.server.service.ports | nindent 2 }}
   clusterIP: None
   selector:
     {{- include "venice.selectorLabels.server" . | nindent 4 }}
